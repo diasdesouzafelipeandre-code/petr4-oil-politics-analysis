@@ -31,20 +31,21 @@ A análise foi conduzida em etapas que incluem:
 ## Estrutura do projeto
 
 - [Comparação.ipynb](Comparação.ipynb): notebook principal com a análise e os gráficos.
-- [Tese.txt](Tese.txt): resumo da tese, metodologia e principais conclusões.
+- [metodologia.md](metodologia.md): hipótese, metodologia detalhada e conclusões da análise.
 - [Images](Images): pasta com as visualizações geradas.
+- [requirements.txt](requirements.txt): bibliotecas necessárias para reproduzir a análise.
 - [LICENSE](LICENSE): licença do projeto.
 
 ## Resultados principais
 
 - As séries apresentam comportamento semelhante em termos gerais.
 - Foram observadas divergências importantes em períodos específicos.
-- O período da pandemia, especialmente em 2020, foi um marco extremo, com queda expressiva no preço do petróleo.
-- A análise também indicou uma relação de causalidade relevante entre as séries, com o teste de Granger sugerindo conexão estatística importante.
-- Momentos de divergência foram associados a eventos como:
-  - alta de combustíveis e discussões sobre preços da gasolina em 2022;
-  - queda intensa das ações da Petrobras em 2013;
-  - denúncias e investigações envolvendo a empresa em 2014.
+- O período da pandemia, especialmente em 20/04/2020, foi um marco extremo, com o preço do petróleo chegando a valores negativos.
+- O teste de causalidade de Granger indicou uma relação estatisticamente significativa entre as séries, com **p-valor = 0,0053**, sugerindo uma conexão direta entre o preço do petróleo e a PETR4.
+- Momentos de maior divergência entre as séries foram associados a eventos como:
+  - alta de combustíveis e discussões sobre preços da gasolina em fevereiro de 2022;
+  - queda intensa das ações da Petrobras em julho de 2013;
+  - denúncias e investigações envolvendo a empresa em fevereiro de 2014.
 
 ## Visualizações
 
@@ -62,10 +63,11 @@ A análise foi conduzida em etapas que incluem:
 
 ## Como executar
 
-1. Leia primeiro o arquivo [Tese.txt](Tese.txt) para compreender a hipótese e o contexto da análise.
-2. Abra o notebook [Comparação.ipynb](Comparação.ipynb) em um ambiente Jupyter ou no VS Code.
-3. Certifique-se de que os arquivos da pasta [DATA_SET](DATA_SET) estejam presentes.
-4. Execute as células do notebook para reproduzir a análise e gerar as visualizações.
+1. Leia primeiro o arquivo [metodologia.md](metodologia.md) para compreender a hipótese e o contexto da análise.
+2. Instale as dependências: `pip install -r requirements.txt`
+3. Abra o notebook [Comparação.ipynb](Comparação.ipynb) em um ambiente Jupyter ou no VS Code.
+4. Certifique-se de que os arquivos da pasta [DATA_SET](DATA_SET) estejam presentes.
+5. Execute as células do notebook para reproduzir a análise e gerar as visualizações.
 
 ## Observações
 
