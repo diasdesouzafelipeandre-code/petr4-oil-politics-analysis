@@ -1,46 +1,45 @@
-# Metodologia e Conclusões
+# Metodologia revisada e conclusões
 
 ## Objetivo
 
-Esta análise tem como objetivo observar a correlação entre o preço do petróleo cru e as ações PETR4 da Petrobras.
+Comparar PETR4 e WTI de forma metodologicamente consistente, identificando divergências e avaliando evidências de relação entre as séries.
 
-## Hipótese
+## Duas fases do trabalho
 
-A relação entre PETR4 e o preço do petróleo parece ser conjunta, e as diferenças entre essas séries podem indicar instabilidade política interna.
+- **Fase 1 — prática/exploração:** leitura e visualização das séries com `pandas` — bom para aprender e inspecionar dados, mas sujeito a vieses (ex.: desalinhamento por posição).
+- **Fase 2 — análise corrigida:** `Comparação_corrigido.ipynb` aplica correções essenciais: merge por data, normalização, análise em retornos, teste ADF, seleção de lag via VAR e testes de Granger em ambas as direções.
 
-## Metodologia
+## Procedimento (versão corrigida)
 
-- Utilização de dois conjuntos de dados distintos para comparar séries históricas.
-- Avaliação da causalidade entre os preços.
-- Identificação de outliers na diferença entre as séries para encontrar eventos políticos internos relevantes.
+1. Carregamento e inspeção dos arquivos em `DATA_SET/`.
+2. Alinhamento por `Date` via `pd.merge(..., on='Date', how='inner')`.
+3. Normalização das séries pelo máximo de cada série.
+4. Cálculo de retornos diários (`pct_change()`) para análise estacionária.
+5. Teste ADF em níveis e retornos para verificar estacionariedade.
+6. Seleção de defasagem com `VAR(...).select_order(maxlags=30)`.
+7. Teste de Granger sobre retornos, nas duas direções.
 
-## Processo
+## Resultados principais
 
-1. Limpeza dos dados.
-2. Alinhamento e verificação da integridade das séries.
-3. Identificação dos pontos de máximo e mínimo em ambas as séries.
-4. Criação de um índice de variação com base na abertura e no fechamento.
-5. Comparação das variações normalizadas de cada série para evidenciar diferenças relativas.
-6. Teste de causalidade utilizando o **Granger causality test**.
-7. Identificação das maiores variações e busca por notícias relacionadas ao período analisado.
+- A versão corrigida elimina problemas metodológicos da análise inicial (merge por posição; Granger em níveis não estacionários; direção de teste invertida).
+- As séries normalizadas mostram padrões semelhantes em muitos períodos e divergências em outros; essas divergências foram investigadas qualitativamente.
+- A bateria de testes não apresentou evidência robusta de causalidade direta entre WTI e PETR4. A hipótese inicial de causalidade clara foi enfraquecida.
 
-## Resultados
+## Interpretação e limitações
 
-- Os gráficos de variação do preço do petróleo e de PETR4 são, em geral, semelhantes, com algumas diferenças perceptíveis.
-- Um ponto notável foi o preço negativo do petróleo em **20/04/2020**, durante a pandemia.
-- Para comparar as séries de forma consistente, os valores foram normalizados pelo máximo de cada uma, analisando a diferença entre elas sem usar valor absoluto — preservando os sinais negativos gerados na pandemia.
-- O teste de causalidade mostrou uma relação próxima entre as séries, com **p-valor = 0,0053**, sugerindo uma conexão direta.
+- Significância em testes de Granger pode refletir fatores externos comuns (ex.: câmbio USD/BRL) ou choques simultâneos, não causalidade direta.
+- O estudo é exploratório: conclusões causais exigiriam modelos com controles adicionais, dados exógenos e testagem estrutural.
 
-## Diferenças com maior relevância política
+## Próximos passos recomendados
 
-| Data | Evento | Fonte |
-|---|---|---|
-| 17/02/2022 | Alta dos combustíveis; discussão sobre "abrasileirar" o preço da gasolina | [G1](https://g1.globo.com/politica/eleicoes/2022/noticia/2022/02/17/em-meio-a-alta-dos-combustiveis-lula-defende-abrasileirar-o-preco-da-gasolina.ghtml) |
-| 05/07/2013 | Ações da Petrobras atingem menor cotação em quase oito anos | [Valor](https://valor.globo.com/google/amp/empresas/noticia/2013/07/05/acoes-da-petrobras-atingem-menor-cotacao-em-quase-oito-anos.ghtml) |
-| 05/07/2013 | Queda geral da bolsa em meio a rumores de corte de imposto | [UOL](https://economia.uol.com.br/cotacoes/noticias/redacao/2013/07/05/bovespa-opera-em-queda-e-dolar-sobe-nesta-sexta-feira-acompanhe.htm) |
-| 14/02/2014 | Pedido de apuração de denúncia de suborno envolvendo funcionários da Petrobras | [UOL](https://economia.uol.com.br/noticias/efe/2014/02/14/psdb-pede-apuracao-de-denuncia-de-suborno-a-funcionarios-da-petrobras.htm) |
-| 14/02/2014 | Investigação de suborno envolvendo a Petrobras e a SBM Offshore (Holanda) | [Auditar](https://auditar.org.br/2014/02/14/) |
+- Investigar variáveis comuns (ex.: câmbio) como potenciais drivers das semelhanças entre séries.
+- Construir modelos multivariados que incluam fatores macroeconômicos e medidas de risco.
+- Analisar qualitativamente as datas de maior divergência para identificar eventos específicos.
+
+### Séries normalizadas (PETR4 vs WTI)
+
+![Séries normalizadas](Images/series_normalizadas.png)
 
 ## Conclusão
 
-A análise inicial demonstra, com um alto índice de causalidade, que as ações da PETR4 tendem a seguir as variações do preço do petróleo, e que as principais diferenças observadas podem estar relacionadas a acontecimentos marcantes de natureza política. A tese ainda pode ser aprofundada com mais dados e refinamento estatístico.
+A hipótese inicial de causalidade direta entre WTI e PETR4 não foi confirmada de forma robusta. A análise corrigida (segunda fase) é metodologicamente mais adequada e sugere que semelhanças entre as séries podem ser explicadas por fatores externos comuns; pesquisas futuras devem focar nesses fatores.

@@ -1,74 +1,65 @@
-# Análise da relação entre PETR4 e o preço do petróleo
+# Análise comparativa entre PETR4 e o preço do petróleo (versão corrigida)
 
-Este projeto reúne uma análise exploratória e estatística sobre a relação entre o preço do petróleo cru e as ações da Petrobras, representadas pela PETR4. A proposta é investigar se divergências entre essas séries podem estar associadas a eventos políticos e econômicos relevantes no Brasil.
+Este repositório contém a análise final baseada em `Comparação_corrigido.ipynb`. O trabalho começou como uma prática de manipulação e visualização com `pandas` e evoluiu para uma investigação estatística mais cuidadosa.
 
 ## Objetivo
 
-Avaliar se a variação do preço do petróleo acompanha os movimentos das ações PETR4 e verificar se as diferenças observadas entre as séries podem indicar instabilidade política ou outros acontecimentos marcantes.
+Verificar se os movimentos de PETR4 acompanham as variações do preço do petróleo (WTI) e identificar períodos de divergência. A versão corrigida aplica alinhamento por data, normalização e análise em retornos, além de testes de estacionariedade e causalidade.
 
-## Contexto da análise
+## Diferença entre as abordagens
 
-A análise parte da hipótese de que PETR4 e o preço do petróleo apresentam comportamentos semelhantes em grande parte do período estudado, mas que alguns momentos de divergência podem refletir eventos específicos, como crises econômicas, choques de mercado e temas de natureza política.
+- Abordagem inicial (exploratória/prática): manipulação e visualização das séries com `pandas`, sem verificação rigorosa de alinhamento ou estacionariedade. Útil para aprendizado e descoberta inicial.
+- Abordagem atual (`Comparação_corrigido.ipynb`): correções metodológicas — merge por `Date`, normalização por máximo, cálculo de retornos, teste ADF, escolha de lag via VAR e testes de Granger em ambas as direções. Esta versão é a base das conclusões do projeto.
 
-## Metodologia
+## Metodologia resumida (versão corrigida)
 
-A análise foi conduzida em etapas que incluem:
-
-1. Carregamento dos dados de commodities e das ações PETR4.
-2. Limpeza e alinhamento das séries temporais.
-3. Identificação de pontos de máximo e mínimo.
-4. Criação de um índice de variação com base em abertura e fechamento.
-5. Normalização das séries para comparação relativa.
-6. Identificação de outliers e diferenças relevantes entre os movimentos.
-7. Aplicação do teste de causalidade de Granger para avaliar a relação entre as séries.
-8. Comparação dos principais pontos de divergência com notícias e eventos do período.
+1. Carregamento dos dados de `DATA_SET/`.
+2. Alinhamento das séries por `Date` (inner join).
+3. Normalização das séries pelo máximo para comparação relativa.
+4. Cálculo de retornos diários (`pct_change()`) e verificação de estacionariedade com ADF.
+5. Seleção de lag via `VAR(...).select_order(maxlags=30)`.
+6. Teste de causalidade de Granger sobre retornos em ambas as direções.
 
 ## Dados utilizados
 
-- [DATA_SET/Global_Commodity_Prices_2000_2026.csv](DATA_SET/Global_Commodity_Prices_2000_2026.csv)
-- [DATA_SET/Petrobras Historical Stock Data (2000-2026).csv](DATA_SET/Petrobras%20Historical%20Stock%20Data%20(2000-2026).csv)
+- `DATA_SET/Global_Commodity_Prices_2000_2026.csv`
+- `DATA_SET/Petrobras Historical Stock Data (2000-2026).csv`
 
-## Estrutura do projeto
+## Resultados e conclusão
 
-- [Comparação.ipynb](Comparação.ipynb): notebook principal com a análise e os gráficos.
-- [metodologia.md](metodologia.md): hipótese, metodologia detalhada e conclusões da análise.
-- [Images](Images): pasta com as visualizações geradas.
-- [requirements.txt](requirements.txt): bibliotecas necessárias para reproduzir a análise.
-- [LICENSE](LICENSE): licença do projeto.
+- As séries normalizadas evidenciam períodos de divergência entre PETR4 e WTI, mas também muitos períodos de comportamento parecido.
+- Após as correções metodológicas, a bateria de testes (ADF, VAR, Granger) não forneceu evidência robusta de causalidade direta entre WTI e PETR4. A hipótese inicial de causalidade clara foi enfraquecida.
+- As semelhanças observadas entre as séries são provavelmente influenciadas por fatores externos comuns (ex.: câmbio USD/BRL, condições macroeconômicas, choques de liquidez, eventos corporativos).
 
-## Resultados principais
+## Gráfico central
 
-- As séries apresentam comportamento semelhante em termos gerais.
-- Foram observadas divergências importantes em períodos específicos.
-- O período da pandemia, especialmente em 20/04/2020, foi um marco extremo, com o preço do petróleo chegando a valores negativos.
-- O teste de causalidade de Granger indicou uma relação estatisticamente significativa entre as séries, com **p-valor = 0,0053**, sugerindo uma conexão direta entre o preço do petróleo e a PETR4.
-- Momentos de maior divergência entre as séries foram associados a eventos como:
-  - alta de combustíveis e discussões sobre preços da gasolina em fevereiro de 2022;
-  - queda intensa das ações da Petrobras em julho de 2013;
-  - denúncias e investigações envolvendo a empresa em fevereiro de 2014.
+O gráfico principal do estudo são as séries normalizadas de PETR4 e WTI. Para gerar e salvar esse gráfico a partir do notebook `Comparação_corrigido.ipynb`, execute a célula de plot e, em seguida, salve com:
+
+```python
+plt.savefig('Images/series_normalizadas.png', dpi=150, bbox_inches='tight')
+```
+
+O arquivo resultante ficará em `Images/series_normalizadas.png`.
 
 ## Visualizações
 
-### Variação do preço do petróleo
+### Séries normalizadas (PETR4 vs WTI)
 
-![Variação do preço do petróleo](Images/OIL%20variação.png)
+![Séries normalizadas](Images/Series%20normalizadas.png)
 
-### Variação das ações PETR4
+> Figura: séries normalizadas de PETR4 (azul) e WTI (laranja). Salve a imagem com `plt.savefig('Images/Series normalizadas.png')` conforme instruções acima.
 
-![Variação das ações PETR4](Images/Petr4%20variação.png)
+## Próximos passos recomendados
 
-### Diferença entre as séries
-
-![Diferença entre as séries](Images/Diferença%20variação.png)
+- Investigar variáveis externas comuns (ex.: câmbio USD/BRL) como potenciais drivers das semelhanças entre as séries.
+- Incluir controles macroeconômicos e modelos multivariados que incorporem fatores exógenos.
+- Realizar análises qualitativas dos eventos em datas de maior divergência para entender causas específicas.
 
 ## Como executar
 
-1. Leia primeiro o arquivo [metodologia.md](metodologia.md) para compreender a hipótese e o contexto da análise.
-2. Instale as dependências: `pip install -r requirements.txt`
-3. Abra o notebook [Comparação.ipynb](Comparação.ipynb) em um ambiente Jupyter ou no VS Code.
-4. Certifique-se de que os arquivos da pasta [DATA_SET](DATA_SET) estejam presentes.
-5. Execute as células do notebook para reproduzir a análise e gerar as visualizações.
+1. Instale dependências: `pip install -r requirements.txt`
+2. Abra `Comparação_corrigido.ipynb` em Jupyter ou VS Code e execute as células.
+3. Gere e salve o gráfico com `plt.savefig(...)` se desejar um arquivo de imagem.
 
-## Observações
-
-A análise é uma primeira fase de um estudo mais amplo e pode ser aprimorada com tratamento adicional de dados, testes estatísticos mais robustos e inclusão de novas variáveis econômicas e políticas.
+---
+Esta versão relata explicitamente as diferenças entre a abordagem inicial e a análise corrigida e conclui que a relação de causalidade é fraca; os próximos passos devem focar em fatores externos compartilhados.
