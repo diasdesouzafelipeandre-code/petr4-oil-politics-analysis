@@ -45,9 +45,8 @@ O arquivo resultante ficará em `Images/series_normalizadas.png`.
 
 ### Séries normalizadas (PETR4 vs WTI)
 
-![Séries normalizadas](Images/Series%20normalizadas.png)
+![Séries normalizadas](Images/series_normalizadas.png)
 
-> Figura: séries normalizadas de PETR4 (azul) e WTI (laranja). Salve a imagem com `plt.savefig('Images/Series normalizadas.png')` conforme instruções acima.
 
 ## Próximos passos recomendados
 
