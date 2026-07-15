@@ -1,5 +1,7 @@
 pandas
+pandas-datareader
 numpy
 matplotlib
 statsmodels
 jupyterlab
+yfinance
